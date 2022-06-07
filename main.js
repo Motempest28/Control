@@ -8,11 +8,12 @@
 //   });
 
   var sound2 = new Howl({
-    src: ['./sounds/you.mp3']
+    src: ["./sounds/you.mp3"]
   });
   function playMe(){
       sound2.play()
       html5: true
+      document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
   }
 
 // document.getElementById("demo2").onclick = function(){alert("Hello World!")};
