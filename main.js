@@ -7,8 +7,8 @@
 //     src: ['/you.mp3']
 //   });
 
-  var sound2 = new Howl({
-    src: ["/sounds/you.mp3", "/sounds/you.ogg"]
+var sound2 = new Howl({
+    src: ["sounds/you.mp3", "sounds/you.ogg"]
   });
   function playMe(){
       sound2.play()
