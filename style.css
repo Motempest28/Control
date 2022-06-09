@@ -1,6 +1,51 @@
-#container {
-    background-color: deepSkyBlue;
-    width: 100vw;
-    height: 100vw;
-  }
+
+  #myText{
+
+    border: 0ch;
+    background-color:aquamarine;
   
+    }
+
+
+/* Official code */
+
+
+  #body{
+    background-image: url("images/wp3157721-black-wood-wallpaper.jpg");
+  }
+
+  .volumeSlider{
+    color: white;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 15px;
+    background: #000;
+    outline: none;
+    border: 2px solid white;
+    border-radius: 8px;
+  }
+
+  #volumeTitle{
+    padding-left: 57px;
+  }
+
+  .center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+    padding-top: 20px;
+    opacity: 0.75;
+  }
+
+  .content{
+    opacity: 1;
+    background-color: grey;
+    padding: 15px;
+  }
