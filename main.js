@@ -11,11 +11,11 @@
 
 
 // function getVolume(){
-//     var x = document.getElementById("soundVolume").value;
-//     document.getElementById("demo2").innerHTML = x;
-//     x = x / 100;
-//     alert(x);
-//     sound2.volume(x);
+//     var volumeValue = document.getElementById("soundVolume").value;
+//     document.getElementById("demo2").innerHTML = volumeValue;
+//     volumeValue = volumeValue / 100;
+//     alert(volumeValue);
+//     sound2.volume(volumeValue);
 // }
 
 
@@ -49,14 +49,32 @@
 
 //Create variables to track items
 
-//Universal tools
+//Sounds
 //let volume = 
+function getVolume(){
+    console.log("the function was ran")
+    var x = document.getElementById("soundVolume").value;
+    x = x / 100;
+    sound2.volume(x);
+}
+
+
+var sound2 = new Howl({
+    src: ["sounds/you.mp3", "sounds/you.ogg"],
+    html5: true,
+    volume: 0.5,
+  });
+
+  
 
 
 //Scene 1 variables - Cabin
 
 //Track current location of the player
 let currentLocation = "in_bedroom1";
+let currentLocationDisplay;
+
+
 
 //Player inventory
 let playerInventory = {
@@ -89,7 +107,10 @@ let beenToSecondFloorStairwell = false;
 let beenToSecondFloorHallway = false;
 let beenToUpperBedroom = false;
 
+var volumeControl = document.getElementById("soundVolume");
+volumeControl.onchange = function(){getVolume()};
 
+sound2.play();
 //Game Logic
 $(document).ready(function() {
     //fade in the content
@@ -97,6 +118,11 @@ $(document).ready(function() {
     //fade in error reference: https://stackoverflow.com/questions/3398882/jquery-fadein-not-working
     $("#content").hide().fadeIn(3000);
 
+    //hide the quick time choices unhide later for certain fight or flight scenes
+    $("#command_option_holder").hide();
+
+    
+    // alert("audio plays");
     $("form").submit(function() {
 
         
@@ -111,7 +137,11 @@ $(document).ready(function() {
 
 
     });
+    
 });
+
+
+
 
 
 

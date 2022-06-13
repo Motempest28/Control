@@ -13,7 +13,8 @@
     <!-- link to jQuery cdn -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
-
+    <!-- remove error message -->
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body id='body'>
@@ -45,7 +46,14 @@
             <!-- a placeholder div to insert content without having to readjust the form's position -->
             <div id="placeholder"></div>
             <form onsubmit="return false;">
-                <label>></label><input type="text" size="50" id="command_line" autofocus>
+                <div id="command_line_holder">
+                    <label>></label><input type="text" size="50" id="command_line" autofocus>
+                </div>
+                <div id="command_option_holder">
+                    <button id="option1">option 1</button>
+                    <button id="option2">option 2</button>
+                </div>
+                
             </form>
         </div>
 
