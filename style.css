@@ -36,16 +36,19 @@
     padding-left: 57px;
   }
 
-  .center {
+  /* .center {
     margin: auto;
     width: 60%;
     padding: 10px;
-    padding-top: 20px;
-    opacity: 0.75;
-  }
+    padding-top: 20px;    
+    background-color: rgb(124, 119, 119, 0.25);
+  } */
 
-  .content{
-    opacity: 1;
-    background-color: grey;
+  #content{
+    color: white;
     padding: 15px;
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+    padding-top: 20px;   
   }
