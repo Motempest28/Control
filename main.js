@@ -50,7 +50,9 @@
 //Create variables to track items
 
 //Sounds
-//let volume = 
+var volumeControl = document.getElementById("soundVolume");
+volumeControl.onchange = function(){getVolume()};
+
 function getVolume(){
     console.log("the function was ran")
     var x = document.getElementById("soundVolume").value;
@@ -107,10 +109,9 @@ let beenToSecondFloorStairwell = false;
 let beenToSecondFloorHallway = false;
 let beenToUpperBedroom = false;
 
-var volumeControl = document.getElementById("soundVolume");
-volumeControl.onchange = function(){getVolume()};
 
-sound2.play();
+
+
 //Game Logic
 $(document).ready(function() {
     //fade in the content
@@ -121,7 +122,10 @@ $(document).ready(function() {
     //hide the quick time choices unhide later for certain fight or flight scenes
     $("#command_option_holder").hide();
 
-    
+    //audio not playing fix: https://github.com/goldfire/howler.js/issues/1110
+    Howler.stop();
+    Howler.unload();
+    sound2.play();
     // alert("audio plays");
     $("form").submit(function() {
 
