@@ -49,7 +49,9 @@
 
 //Create variables to track items
 
-//Sounds
+//+++++++++++++++++++++++++++++Sound section++++++++++++++++++++++++++++++++++++++
+
+//Volume Controls
 var volumeControl = document.getElementById("soundVolume");
 volumeControl.onchange = function(){getVolume()};
 
@@ -58,20 +60,28 @@ function getVolume(){
     var x = document.getElementById("soundVolume").value;
     x = x / 100;
     sound2.volume(x);
+    backgroundNoise.volume(x);
 }
-
 
 var sound2 = new Howl({
     src: ["sounds/you.mp3", "sounds/you.ogg"],
     html5: true,
-    volume: 0.5,
+    volume: 0.5
   });
 
-  
+var backgroundNoise = new Howl({
+    src: ["sounds/background/cabin-background-sounds.mp3"],
+    html5: true,
+    volume: 0.5,
+    loop: true
+  });
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
 
+//Boolean to check if the player has started the game to start audio <work around from google chrome not allowing auto play>
+let gameStart = false;
 //Track current location of the player
 let currentLocation = "in_bedroom1";
 let currentLocationDisplay;
@@ -126,15 +136,21 @@ $(document).ready(function() {
     //audio not playing fix: https://github.com/goldfire/howler.js/issues/1110
     Howler.stop();
     Howler.unload();
-    sound2.play();
+    
     // alert("audio plays");
     $("form").submit(function() {
+        
+        //After user has submitted a command change the gameStart to true to run audio
+        gameStart = true;
 
+        //check to see if game has started if so then play audio
+        if(gameStart){backgroundNoise.play();};
         
         var input = $("#command_line").val();
 
         if(input.includes("help")){
             $("#message_help").clone().insertBefore("#placeholder").fadeIn(1000);
+            
         }
 
         $("#command_line").val("");
