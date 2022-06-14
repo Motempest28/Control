@@ -12,6 +12,7 @@
 
   #body{
     background-image: url("images/wp3157721-black-wood-wallpaper.jpg");
+    font-family: Futura, Helvetica, and Gill Sans;
   }
 
   .volumeSlider{
@@ -48,7 +49,7 @@
     color: white;
     padding: 15px;
     margin: auto;
-    width: 60%;
+    width: 45%;
     padding: 10px;
     padding-top: 20px;   
   }

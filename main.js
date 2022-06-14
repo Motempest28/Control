@@ -81,7 +81,7 @@ var backgroundNoise = new Howl({
 //Scene 1 variables - Cabin
 
 //Boolean to check if the player has started the game to start audio <work around from google chrome not allowing auto play>
-let gameStart = false;
+let gameStart = true;
 //Track current location of the player
 let currentLocation = "in_bedroom1";
 let currentLocationDisplay;
@@ -95,7 +95,13 @@ let playerInventory = {
     nails: false,
     box: false,
     basementKey: false,
+}
 
+//Bedroom items/Events
+let bedroomItems = {
+    //After player gets out of starting area and types help
+    breakFree: false,
+    drawer: false,
 }
 
 //Track all the rooms where the user has been and have a basic layout of the map of this scene
@@ -140,11 +146,14 @@ $(document).ready(function() {
     // alert("audio plays");
     $("form").submit(function() {
         
-        //After user has submitted a command change the gameStart to true to run audio
-        gameStart = true;
+        
 
-        //check to see if game has started if so then play audio
-        if(gameStart){backgroundNoise.play();};
+        //check to see if game has started if so then play audio 
+        if(gameStart){
+            backgroundNoise.play();
+            //After user has submitted a command change the gameStart to false to prevent new instances
+            gameStart = false;
+        };
         
         var input = $("#command_line").val();
 
