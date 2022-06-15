@@ -81,6 +81,11 @@ var backgroundNoise = new Howl({
     volume: 0.75,
   });
 
+  var igniteSFX = new Howl({
+    src: ["sounds/sfx/ignite.mp3"],
+    html5: true,
+    volume: 1,
+  });
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
@@ -100,7 +105,7 @@ let playerInventory = {
     nails: false,
     box: false,
     basementKey: false,
-    note: true
+    startingNote: true
 }
 
 //Bedroom items/Events
@@ -196,7 +201,7 @@ $(document).ready(function() {
             }
 
             //note
-            if(playerInventory.note){
+            if(playerInventory.startingNote){
                 pNote = "-Strange Note <br>";
             }
             else{
@@ -222,12 +227,25 @@ $(document).ready(function() {
         else if(input.includes("inspect")){
 
             //inspect note
-            if(input.includes("note") && playerInventory.note == true){
-                $("<p>Note testing</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            if(input.includes("note") && playerInventory.startingNote == true){
+                $("<p id='notes'>You are in danger! <br></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p id='notes'>There is something about this place…  <br></p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                $("<p id='notes'>This cabin, it is not natural.  <br></p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                $("<p id='notes'>You must escape quickly.  <br></p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                $("<p id='notes'>I know you cannot trust me.  <br></p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p id='notes'>However, believe me whatever put you there has plans that are more nefarious then what I could think of… .  <br></p>").hide().insertBefore("#placeholder").fadeIn(5500);
+                $("<p id='notes'>You’re probably thinking who is this guy?   <br></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                $("<p id='notes'>Lets just say I’m your only ticket out of here bozo  <br></p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                $("<p id='notes'>I have limited control with how I can help you. BUT find other notes in this place and I can guide you out of here. Find other notes throughout the cabin. I see-  <br></p>").hide().insertBefore("#placeholder").fadeIn(6500);
+
                 paperSFX.play();
+                setTimeout(function(){
+                    igniteSFX.play();
+                }, 7000);
+                
 
                 //paper was destoryed
-                playerInventory.note = false;
+                playerInventory.startingNote = false;
             }
 
             //inspect was not paired with a existing item or object
