@@ -12,7 +12,9 @@
 
   #body{
     background-image: url("images/wp3157721-black-wood-wallpaper.jpg");
-    font-family: Futura, Helvetica, and Gill Sans;
+    font-family: 'Courier New', Courier, monospace ;
+    /* Courier M */
+    /* Futura, Helvetica, and Gill Sans */
   }
 
   .volumeSlider{

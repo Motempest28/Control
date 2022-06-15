@@ -59,21 +59,26 @@ function getVolume(){
     console.log("the function was ran")
     var x = document.getElementById("soundVolume").value;
     x = x / 100;
-    sound2.volume(x);
     backgroundNoise.volume(x);
 }
-
-var sound2 = new Howl({
-    src: ["sounds/you.mp3", "sounds/you.ogg"],
-    html5: true,
-    volume: 0.5
-  });
 
 var backgroundNoise = new Howl({
     src: ["sounds/background/cabin-background-sounds.mp3"],
     html5: true,
     volume: 0.5,
     loop: true
+  });
+
+  var staticSFX = new Howl({
+    src: ["sounds/sfx/static.mp3"],
+    html5: true,
+    volume: 0.75,
+  });
+
+  var paperSFX = new Howl({
+    src: ["sounds/sfx/paper.mp3"],
+    html5: true,
+    volume: 0.75,
   });
 
 
@@ -95,6 +100,7 @@ let playerInventory = {
     nails: false,
     box: false,
     basementKey: false,
+    note: true
 }
 
 //Bedroom items/Events
@@ -155,14 +161,90 @@ $(document).ready(function() {
             gameStart = false;
         };
         
+        //Get user's command
         var input = $("#command_line").val();
 
+        //when user types help
         if(input.includes("help")){
-            $("#message_help").clone().insertBefore("#placeholder").fadeIn(1000);
-            
+            staticSFX.play();
+            $("<p><br>Static hits you out of no where and you start to remember...<br></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            $("<p>Type <b><i><u>Help</u></i></b> to remember your actions...<br></p>").hide().insertBefore("#placeholder").fadeIn(4000);
+            $("<p>Type <b><i><u>Inventory</u></i></b> to check your belongings...<br></p>").hide().insertBefore("#placeholder").fadeIn(4500);
+            $("<p>Type <b><i><u>Scan</u></i></b> to scan the room...<br></p>").hide().insertBefore("#placeholder").fadeIn(5000);
+            $("<p>Type <b><i><u>Inspect 'Object'</u></i></b> to inspect something in the room or something in the inventory...<br></p>").hide().insertBefore("#placeholder").fadeIn(5500);           
+            $("<p>Type <b><i><u>Enter 'location'</u></i></b> to move to the next location...<br></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+            $("<p><i>God this doesn't make any sense. What the hell am I thinking... Wait was I the one talking?</i><br></p>").hide().insertBefore("#placeholder").fadeIn(6500);         
         }
 
+        //when user types inventory
+        else if(input.includes("inventory")){
+
+            //knife
+            if(playerInventory.knife){
+                pKnife = "-Knife <br>";
+            }
+            else{
+                 pKnife = "";
+            }
+
+            //basement key
+            if(playerInventory.basementKey){
+                pBasementKey = "-Basement Key <br>";
+            }
+            else{
+                pBasementKey = "";
+            }
+
+            //note
+            if(playerInventory.note){
+                pNote = "-Strange Note <br>";
+            }
+            else{
+                pNote = "";
+            }
+
+            //if the user has nothing
+            if(playerInventory.knife == false && playerInventory.basementKey == false && playerInventory.note == false){
+                $("<p>There is nothing I'm holding...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            }
+            //if the user has something
+            else{
+                $("<p>Here is my inventory... <br>"+ pKnife + pBasementKey + pNote +"</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            }
+        }
+
+        //when user types scan
+        else if(input.includes("scan")){
+
+        }
+
+        //when user types inspect
+        else if(input.includes("inspect")){
+
+            //inspect note
+            if(input.includes("note") && playerInventory.note == true){
+                $("<p>Note testing</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                paperSFX.play();
+
+                //paper was destoryed
+                playerInventory.note = false;
+            }
+
+            //inspect was not paired with a existing item or object
+            else{
+                $("<p>What?... What was I inspecting again? ugh... I should check again to see what was I inspecting...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Something in my <u>Inventory</u> perhaps? or was it something in this room?... I should <u>scan<u> to check...</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+            }
+
+        }
+
+        else{
+            $("<p>I... what was I doing? <i>sigh</i> I guess I need to ask for help again to remember what I can do...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+        }
+        //after a function has been run clear the textbox
+        
         $("#command_line").val("");
+        
 
 
 
