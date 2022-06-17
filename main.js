@@ -41,6 +41,24 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var knockingSFX = new Howl({
+    src: ["sounds/sfx/knocking.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var dragingSFX = new Howl({
+    src: ["sounds/sfx/dragging.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorOpeningSFX = new Howl({
+    src: ["sounds/sfx/doorOpening.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
 
@@ -64,9 +82,7 @@ let playerInventory = {
 
 //Bedroom items/Events
 let bedroomItems = {
-    //After player gets out of starting area and types help
-    breakFree: false,
-    drawer: false,
+    bedframe: false,
 }
 
 //Track all the rooms where the user has been and have a basic layout of the map of this scene
@@ -174,7 +190,11 @@ $(document).ready(function() {
 
         //when user types scan
         else if(input.includes("scan")){
-
+            if(currentLocation=="in_bedroom1"){
+                $("<p>Quickly looking around the room I can see there is...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>A pitch black <u><i><b>window</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            }
         }
 
         //when user types inspect
@@ -195,11 +215,40 @@ $(document).ready(function() {
                 paperSFX.play();
                 setTimeout(function(){
                     igniteSFX.play();
-                }, 7000);
+                    $("<p><i>Shit!</i> The note ignites in my hand as if something was trying to stop me from reading the rest of the note...<br></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }, 10000);
                 
 
                 //paper was destoryed
                 playerInventory.startingNote = false;
+            }
+
+            else if(input.includes("window") && currentLocation=="in_bedroom1"){
+                $("<p>Using all my might the window doesn't budge...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                setTimeout(function(){
+                    knockingSFX.play();
+                    $("<p><i>WHAT THE?!</i> The window starts knocking back at me following parts of the walls continue to knock like there are people all around me!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Forget this place I get to get through that damn <i><b>door</i></b>!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                }, 3000)
+            }
+
+            else if(input.includes("bedframe") && currentLocation=="in_bedroom1"){
+                $("<p>Slowly but surely. the bedframe is moved off of the <i><b>door</i></b> ...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Wondering if the bedframe was protecting me from what is outside this room. I know I'll just die here with no supplies to keep me going.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                dragingSFX.play();
+                bedroomItems.bedframe = true;
+            }
+            
+            else if(input.includes("door") && currentLocation=="in_bedroom1" && bedroomItems.bedframe == true){
+                $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>....</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                $("<p>......</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p><i><b> Why the hell do all creepy ass doors have to sound like that...</b> </i></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                doorOpeningSFX.play();
+                currentLocation = "in_livingRoom"
+                beenToLivingRoom = true;
+                $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(3500);
             }
 
             //inspect was not paired with a existing item or object
