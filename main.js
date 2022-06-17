@@ -59,6 +59,12 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var walkingOnWoodSFX = new Howl({
+    src: ["sounds/sfx/walkingOnWood.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
 
@@ -68,6 +74,13 @@ let gameStart = true;
 let currentLocation = "in_bedroom1";
 let currentLocationDisplay;
 
+//Ending Triggers
+let gameEndings = {
+    ending1: false,
+    ending2: false,
+    ending3: false,
+    ending4: false
+}
 
 
 //Player inventory
@@ -84,6 +97,13 @@ let playerInventory = {
 let bedroomItems = {
     bedframe: false,
 }
+
+//Living room items/Events
+let livingRoomItems = {
+    
+}
+
+
 
 //Track all the rooms where the user has been and have a basic layout of the map of this scene
 
@@ -195,6 +215,14 @@ $(document).ready(function() {
                 $("<p>A pitch black <u><i><b>window</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
             }
+            else if(currentLocation=="in_livingRoom"){
+                $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>And... there looks like to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                walkingOnWoodSFX.play();
+
+                $("<p>And... there looks like to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            }
+
         }
 
         //when user types inspect
@@ -255,6 +283,13 @@ $(document).ready(function() {
             else{
                 $("<p>What?... What was I inspecting again? ugh... I should check again to see what was I inspecting...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Something in my <u>Inventory</u> perhaps? or was it something in this room?... I should <u>scan<u> to check...</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+            }
+
+        }
+
+        else if(input.includes("enter")){
+            if(input.includes("kitchen")){
+
             }
 
         }
