@@ -1,50 +1,4 @@
 
-//****************Testing***************************
-//sound import and useage reference
-//importing - https://www.youtube.com/watch?v=hn7MhPt24L4
-//usage - https://github.com/goldfire/howler.js/blob/master/README.md#quick-start
-// var sound = new Howl({
-//     src: ['/you.mp3']
-//   });
-
-
-
-
-// function getVolume(){
-//     var volumeValue = document.getElementById("soundVolume").value;
-//     document.getElementById("demo2").innerHTML = volumeValue;
-//     volumeValue = volumeValue / 100;
-//     alert(volumeValue);
-//     sound2.volume(volumeValue);
-// }
-
-
-// var sound2 = new Howl({
-//     src: ["sounds/you.mp3", "sounds/you.ogg"],
-//     html5: true,
-//     volume: 0.5,
-//   });
-
-
-// function playMe(){
-//       sound2.play();
-//       document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
-      
-//   }
-
-// // document.getElementById("demo2").onclick = function(){alert("Hello World!")};
-// document.getElementById("demo").onclick = function() {playMe()};
-// document.getElementById("soundcheck").onclick = function() {getVolume()};
-
-
-// //input field testing
-// document.getElementById("myButton").onclick = function(){
-//     var userText = document.getElementById("myText").value;
-//     console.log(userText);
-//     userText = document.getElementById("myText").value = "";
-//     console.log(userText);
-// }
-
 //*******************************official Code************************************* */
 
 //Create variables to track items
@@ -65,7 +19,7 @@ function getVolume(){
 var backgroundNoise = new Howl({
     src: ["sounds/background/cabin-background-sounds.mp3"],
     html5: true,
-    volume: 0.5,
+    volume: 0.25,
     loop: true
   });
 
