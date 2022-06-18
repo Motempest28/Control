@@ -65,6 +65,24 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var tvMessageVO = new Howl({
+    src: ["sounds/messages/tvMessage.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var crtBreakSFX = new Howl({
+    src: ["sounds/sfx/crtBreak.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var static2SFX = new Howl({
+    src: ["sounds/sfx/static2.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
 
@@ -100,7 +118,8 @@ let bedroomItems = {
 
 //Living room items/Events
 let livingRoomItems = {
-    
+    tv: false,
+    drawer: false
 }
 
 
@@ -119,7 +138,7 @@ let beenToBasementStarwell = false;
 let beenToBasementFloor = false;
 
 //Front door event trigger
-let beenToEntranceHallway = false;
+let frontDoorCount = 0;
 
 //Second floor
 let beenToSecondFloorStairwell = false;
@@ -217,10 +236,17 @@ $(document).ready(function() {
             }
             else if(currentLocation=="in_livingRoom"){
                 $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>And... there looks like to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 walkingOnWoodSFX.play();
 
-                $("<p>And... there looks like to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                if(livingRoomItems.tv == false){
+                    $("<p>Oh there is a <b><u>TV</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                }
+                if(livingRoomItems.drawer == false){
+                    $("<p>Looks to be a <b><u>drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                }
+
+                $("<p>OH SNAPS the <b><u>front door</u></b> lets check it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
             }
 
         }
@@ -244,8 +270,7 @@ $(document).ready(function() {
                 setTimeout(function(){
                     igniteSFX.play();
                     $("<p><i>Shit!</i> The note ignites in my hand as if something was trying to stop me from reading the rest of the note...<br></p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                }, 10000);
-                
+                }, 10000);              
 
                 //paper was destoryed
                 playerInventory.startingNote = false;
@@ -261,7 +286,7 @@ $(document).ready(function() {
             }
 
             else if(input.includes("bedframe") && currentLocation=="in_bedroom1"){
-                $("<p>Slowly but surely. the bedframe is moved off of the <i><b>door</i></b> ...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Slowly but surely. the bedframe is moved off of the <u><i><b>door</i></b></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Wondering if the bedframe was protecting me from what is outside this room. I know I'll just die here with no supplies to keep me going.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 dragingSFX.play();
                 bedroomItems.bedframe = true;
@@ -279,6 +304,26 @@ $(document).ready(function() {
                 $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(3500);
             }
 
+            else if(input.includes("tv") && currentLocation=="in_livingRoom" && livingRoomItems.tv == false){
+                $("<p>The <i><b>TV</i></b> tuns on with a loud static and then a voice comes through...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                staticSFX.on('end',function(){
+                    tvMessageVO.play();
+                    $("#command_line").hide();
+                });
+                staticSFX.play();
+                
+                setTimeout(function(){
+                    $("#command_line").hide().fadeIn(3000);
+                    static2SFX.on('end',function(){
+                        crtBreakSFX.play();
+                        $("<p><i>SHIT</i> Quickly backing away from the TV after it somehow imploded</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p>So... options are <i><u>Basement</i></u>... yikes</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    });
+                    static2SFX.play();
+                }, 34000)
+                livingRoomItems.tv = true;
+            }
+
             //inspect was not paired with a existing item or object
             else{
                 $("<p>What?... What was I inspecting again? ugh... I should check again to see what was I inspecting...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -288,8 +333,18 @@ $(document).ready(function() {
         }
 
         else if(input.includes("enter")){
-            if(input.includes("kitchen")){
-
+            if(input.includes("kitchen") && currentLocation == "in_livingRoom"){
+                walkingOnWoodSFX.play();
+                $("<p>If it wasn't so damn creepy this could be a nice kitchen...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                currentLocation ="in_kitchen";
+            }
+            else if(input.includes("living room") && currentLocation =="in_kitchen"){
+                walkingOnWoodSFX.play();
+                $("<p>Back to the <i><b><u>living room</i></b></u> again...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                currentLocation ="in_livingRoom";
+            }
+            else{
+                $("<p>Crap where was I trying to go again? I should scan the room and see where I can go... Duh...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
             }
 
         }
