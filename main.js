@@ -23,6 +23,13 @@ var backgroundNoise = new Howl({
     loop: true
   });
 
+  var darkNoise = new Howl({
+    src: ["sounds/background/dark.mp3"],
+    html5: true,
+    volume: 0.5,
+    loop: true
+  });
+
   var staticSFX = new Howl({
     src: ["sounds/sfx/static.mp3"],
     html5: true,
@@ -65,12 +72,6 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
-  var tvMessageVO = new Howl({
-    src: ["sounds/messages/tvMessage.mp3"],
-    html5: true,
-    volume: 1,
-  });
-
   var crtBreakSFX = new Howl({
     src: ["sounds/sfx/crtBreak.mp3"],
     html5: true,
@@ -83,8 +84,35 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var lockedDoorSFX = new Howl({
+    src: ["sounds/sfx/lockedDoor.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorKickSFX = new Howl({
+    src: ["sounds/sfx/doorKick1.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorMessage1VO = new Howl({
+    src: ["sounds/messages/doorMessage1.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var tvMessageVO = new Howl({
+    src: ["sounds/messages/tvMessage.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene 1 variables - Cabin
+
+//for auto scroll
+const commandlinePlaceholder = document.getElementById("command_line")
 
 //Boolean to check if the player has started the game to start audio <work around from google chrome not allowing auto play>
 let gameStart = true;
@@ -230,11 +258,12 @@ $(document).ready(function() {
         //when user types scan
         else if(input.includes("scan")){
             if(currentLocation=="in_bedroom1"){
-                $("<p>Quickly looking around the room I can see there is...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Quickly looking around the bedroom I can see there is...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>A pitch black <u><i><b>window</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
             }
             else if(currentLocation=="in_livingRoom"){
+                $("<p>Looks like im in the <b><u>Living room</u></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 walkingOnWoodSFX.play();
@@ -246,7 +275,7 @@ $(document).ready(function() {
                     $("<p>Looks to be a <b><u>drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(4500);
                 }
 
-                $("<p>OH SNAPS the <b><u>front door</u></b> lets check it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p>OH SNAPS the <b><u>front door</u></b>! lets inspect it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
             }
 
         }
@@ -281,13 +310,13 @@ $(document).ready(function() {
                 setTimeout(function(){
                     knockingSFX.play();
                     $("<p><i>WHAT THE?!</i> The window starts knocking back at me following parts of the walls continue to knock like there are people all around me!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                    $("<p>Forget this place I get to get through that damn <i><b>door</i></b>!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p>Forget this place I get to get through that damn <i><b>door</b></i>!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 }, 3000)
             }
 
             else if(input.includes("bedframe") && currentLocation=="in_bedroom1"){
                 $("<p>Slowly but surely. the bedframe is moved off of the <u><i><b>door</i></b></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>Wondering if the bedframe was protecting me from what is outside this room. I know I'll just die here with no supplies to keep me going.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                $("<p>Wondering if the bedframe was protecting me from what is outside this room. I know I'll just die here with no supplies to keep me going. Lets inspect the door and find out where the hell I am</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 dragingSFX.play();
                 bedroomItems.bedframe = true;
             }
@@ -300,8 +329,8 @@ $(document).ready(function() {
                 doorOpeningSFX.play();
                 currentLocation = "in_livingRoom"
                 beenToLivingRoom = true;
-                $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
             }
 
             else if(input.includes("tv") && currentLocation=="in_livingRoom" && livingRoomItems.tv == false){
@@ -313,15 +342,64 @@ $(document).ready(function() {
                 staticSFX.play();
                 
                 setTimeout(function(){
-                    $("#command_line").hide().fadeIn(3000);
+                    $("#command_line").hide().fadeIn(4000);
                     static2SFX.on('end',function(){
                         crtBreakSFX.play();
                         $("<p><i>SHIT</i> Quickly backing away from the TV after it somehow imploded</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                        $("<p>So... options are <i><u>Basement</i></u>... yikes</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p>Who the heck is this guy? What is this place really man...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                        if(playerInventory.startingNote == true){
+                            $("<p>What note is he talking about? I should check my inventory... He might have slipped it in there when I was knocked out...</p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                        }
+                        $("<p>So... options are <i><u>Basement</u></i>... yikes that doesn't sound fun...</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                        $("<p>Up the <i><u>stairs</u></i>...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
+                        $("<p>And then we have the <i><u>front Door</u></i>...</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                        $("<p>We could be a rebel and run out that door... Thing looks like a running head start would break it down. haha</p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                        
                     });
                     static2SFX.play();
                 }, 34000)
                 livingRoomItems.tv = true;
+            }
+
+            else if(input.includes("door") && currentLocation=="in_livingRoom"){
+                if(frontDoorCount == 0){
+                    Howler.stop();
+                    lockedDoorSFX.play();
+                    darkNoise.play();
+                    $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Attemping to turn the knob the door doesn't budge but it feels weak... </p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p>I could try again?...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    frontDoorCount++;
+                }
+                else if(frontDoorCount == 1){
+                    $("#command_line").hide();
+                    doorMessage1VO.play();
+                    $("<p><b>JESUS H CHRIST</b> Where the hell is that voice coming from?</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p><i>Quickly checking behind and appears to be no one there...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Ain't no better time than the present!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p><i>you then proceed to kick the door.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    setTimeout(function(){
+                        doorKickSFX.play();
+                        $("<p><i>Door proceeds to show damage!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                        $("#command_line").hide().fadeIn(4000);
+                    },10500)
+                    frontDoorCount++;   
+                }
+                else if(frontDoorCount == 2){
+                    $("#command_line").hide();
+                    
+                    $("<p><b>JESUS H CHRIST</b> Where the hell is that voice coming from?</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p><i>Quickly checking behind and appears to be no one there...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Ain't no better time than the present!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p><i>you then proceed to kick the door.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    setTimeout(function(){
+                        doorKickSFX.play();
+                        $("<p><i>Door proceeds to show damage!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                        $("#command_line").hide().fadeIn(4000);
+                    },10500)
+                    frontDoorCount++;   
+                }
+                
             }
 
             //inspect was not paired with a existing item or object
@@ -343,6 +421,19 @@ $(document).ready(function() {
                 $("<p>Back to the <i><b><u>living room</i></b></u> again...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 currentLocation ="in_livingRoom";
             }
+            else if(input.includes("basement") && currentLocation =="in_livingRoom"){
+                if(playerInventory.basementKey == true){
+                    doorOpeningSFX.play();
+                walkingOnWoodSFX.play();
+                $("<p>Well here goes nothing... Down to the basement we go...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                currentLocation ="in_basement";
+                }
+                else{
+                    lockedDoorSFX.play();
+                    $("<p>Damn it... the door to the basement is locked. Must be a key somewhere here...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }
+                
+            }
             else{
                 $("<p>Crap where was I trying to go again? I should scan the room and see where I can go... Duh...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
             }
@@ -352,13 +443,10 @@ $(document).ready(function() {
         else{
             $("<p>I... what was I doing? <i>sigh</i> I guess I need to ask for help again to remember what I can do...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
         }
-        //after a function has been run clear the textbox
-        
+        //after a function has been run clear the textbox        
         $("#command_line").val("");
-        
-
-
-
+        //Auto scroll so player doesnt miss out new text
+        commandlinePlaceholder.scrollIntoView({behavior:"smooth"});
     });
     
 });
