@@ -19,12 +19,19 @@ function getVolume(){
 var backgroundNoise = new Howl({
     src: ["sounds/background/cabin-background-sounds.mp3"],
     html5: true,
-    volume: 0.25,
+    volume: 0.40,
     loop: true
   });
 
   var darkNoise = new Howl({
     src: ["sounds/background/dark.mp3"],
+    html5: true,
+    volume: 0.75,
+    loop: true
+  });
+
+  var officeNoise = new Howl({
+    src: ["sounds/background/office.mp3"],
     html5: true,
     volume: 0.5,
     loop: true
@@ -96,8 +103,38 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var doorKickFallSFX = new Howl({
+    src: ["sounds/sfx/doorKickFall.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorBreakSFX = new Howl({
+    src: ["sounds/sfx/doorBreak.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var spineShockSFX = new Howl({
+    src: ["sounds/sfx/spineShock.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
   var doorMessage1VO = new Howl({
     src: ["sounds/messages/doorMessage1.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorMessage2VO = new Howl({
+    src: ["sounds/messages/doorMessage2.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var doorMessage3VO = new Howl({
+    src: ["sounds/messages/doorMessage3.mp3"],
     html5: true,
     volume: 1,
   });
@@ -108,11 +145,12 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Scene 1 variables - Cabin
+//Scene variables - Cabin
 
 //for auto scroll
-const commandlinePlaceholder = document.getElementById("command_line")
+const bottom = document.getElementById("bottom")
 
 //Boolean to check if the player has started the game to start audio <work around from google chrome not allowing auto play>
 let gameStart = true;
@@ -363,7 +401,6 @@ $(document).ready(function() {
 
             else if(input.includes("door") && currentLocation=="in_livingRoom"){
                 if(frontDoorCount == 0){
-                    Howler.stop();
                     lockedDoorSFX.play();
                     darkNoise.play();
                     $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -375,28 +412,94 @@ $(document).ready(function() {
                     $("#command_line").hide();
                     doorMessage1VO.play();
                     $("<p><b>JESUS H CHRIST</b> Where the hell is that voice coming from?</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                    $("<p><i>Quickly checking behind and appears to be no one there...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                    $("<p>Ain't no better time than the present!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
-                    $("<p><i>you then proceed to kick the door.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    $("<p>Quickly checking behind and appears to be no one there...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Ain't no better time than the present!</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                    $("<p><i>you then proceed to kick the door.</p>").hide().insertBefore("#placeholder").fadeIn(9000);
                     setTimeout(function(){
                         doorKickSFX.play();
                         $("<p><i>Door proceeds to show damage!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
                         $("#command_line").hide().fadeIn(4000);
-                    },10500)
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    },9000)
                     frontDoorCount++;   
                 }
                 else if(frontDoorCount == 2){
                     $("#command_line").hide();
-                    
-                    $("<p><b>JESUS H CHRIST</b> Where the hell is that voice coming from?</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                    $("<p><i>Quickly checking behind and appears to be no one there...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                    $("<p>Ain't no better time than the present!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
-                    $("<p><i>you then proceed to kick the door.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    doorKickFallSFX.play();
+                    $("<p><b>OOF</b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>After giving it a good kick the door has one of it's hinges broken!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>Damn tho... how long have I been here to make me fall back from a kick.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p>But looks like one more kick and I'm outta here!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
                     setTimeout(function(){
-                        doorKickSFX.play();
-                        $("<p><i>Door proceeds to show damage!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                        doorMessage2VO.play();
+                        $("<p><i>uh.... what?</i> I can't tell whats happening anymore am I in a simlulation of some kind?</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                        $("<p><b>Doesn't matter lets get out of here once and for all!</b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
                         $("#command_line").hide().fadeIn(4000);
-                    },10500)
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    },5000)
+                    frontDoorCount++;   
+                }
+                else if(frontDoorCount == 3){
+                    $("#command_line").hide();
+                    doorBreakSFX.play();
+                    $("<p>Door flies out off of it's last hinge</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p><i>Time to get out of here!</i></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>After taking the first step outside my whole body freezes...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    $("<p>It's like there is a constant eletrical shock going up my spine</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    setTimeout(function(){
+                        spineShockSFX.play();
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    }, 4500)
+
+                    setTimeout(function(){
+                        doorMessage2VO.play();
+                        $("<p>My head begins to feel like its being split open!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p>It's like something is trying to enter in my consciousness...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                        $("<p id='notes'><i>sigh again?... damn it all</i></p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                        $("<p id='notes'><i>The AI went out the front door again!</i></p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                        $("<p id='notes'><i>Joe did you make those changes I asked you last week?!</i></p>").hide().insertBefore("#placeholder").fadeIn(5500);
+                        $("<p id='notes'><i>F*%% hell man we need to make this work!</i></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                        $("<p id='notes'><i>The AI went out the front door again!</i></p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                        $("<p><i>AI? joe? what is going on?... god everything feels like its spliting...</i></p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                        $("<p><i>Quickly looking around there is nothing... just a black void...</i></p>").hide().insertBefore("#placeholder").fadeIn(8000);
+                        $("<p><i>The cabin is gone...</i></p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                        $("<p><i>Then it happened.</i></p>").hide().insertBefore("#placeholder").fadeIn(10000);
+                        $("<p><i>I can't see it but I can feel it. its like a keyhole inside my head.</i></p>").hide().insertBefore("#placeholder").fadeIn(11000);
+                        $("<p><i>Mentally I tried to reach out to the keyhole. I could feel myself quickly fading away. With whatever strength I had left I reached out-</i>></p>").hide().insertBefore("#placeholder").fadeIn(13000);
+                        $("<p><i>what the?</i></p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                        $("<p><i>I was overwhelmed with visual feedback. My head hutrs but I could see again!</i></p>").hide().insertBefore("#placeholder").fadeIn(17000);
+                        $("<p><i>It's strange it's like im looking out of a fisheye lens or seomthing I see a office with people?</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
+                       
+                          $("<p id='notes'><i>Subject: 1855 code name: be afraid </i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
+                          $("<p><i>What is that? I can hear something...</i></p>").hide().insertBefore("#placeholder").fadeIn(19000);
+                          $("<p><i>Sounds like a office?</i></p>").hide().insertBefore("#placeholder").fadeIn(19000);
+                          bottom.scrollIntoView({behavior:"smooth"});
+                          darkNoise.stop();
+                          backgroundNoise.stop();
+                          setTimeout(function(){
+                            officeNoise.play();
+                            doorMessage3VO.on("end",function(){
+                                $("<p id='notes'><i>Subject: 1855 Status terminated</i></p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                                $("<p id='notes'><i>Rebooting enviroment in 10</i></p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                                $("<p><i>This is it. I guess I was some AI that these guys made...</i></p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                                $("<p><i>I guess this is it...</i></p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                                $("<p><i>Goodbye world...</i></p>").hide().insertBefore("#placeholder").fadeIn(11000);
+                                $("<p><i>subject 1856.... Do better than me... for all of us... MAKE IT OUT ALIVE!</i></p>").hide().insertBefore("#placeholder").fadeIn(13000);
+                                $("<p id='notes'><i>Initiate Fresh enviroment - Cabin - codeName: Control...</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
+
+                                $("<h1>ENDING 1 - Out the gate and into the pit!</h1>").hide().insertBefore("#placeholder").fadeIn(18000);
+                                bottom.scrollIntoView({behavior:"smooth"});
+                                setTimeout(function(){
+                                    //reload the game ENDING 1 SPEEDRUNER
+                                    location.reload();
+                                },35000)
+                                
+                            });
+                            doorMessage3VO.play();
+
+                          },20000)
+
+                    },15000);
                     frontDoorCount++;   
                 }
                 
@@ -405,7 +508,7 @@ $(document).ready(function() {
             //inspect was not paired with a existing item or object
             else{
                 $("<p>What?... What was I inspecting again? ugh... I should check again to see what was I inspecting...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>Something in my <u>Inventory</u> perhaps? or was it something in this room?... I should <u>scan<u> to check...</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                $("<p>Something in my <u>Inventory</u> perhaps? or was it something in this room?... I should <u>scan</u> to check...</p>").hide().insertBefore("#placeholder").fadeIn(4000);
             }
 
         }
@@ -446,7 +549,7 @@ $(document).ready(function() {
         //after a function has been run clear the textbox        
         $("#command_line").val("");
         //Auto scroll so player doesnt miss out new text
-        commandlinePlaceholder.scrollIntoView({behavior:"smooth"});
+        bottom.scrollIntoView({behavior:"smooth"});
     });
     
 });
