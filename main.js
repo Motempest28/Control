@@ -337,6 +337,7 @@ $(document).ready(function() {
                 setTimeout(function(){
                     igniteSFX.play();
                     $("<p><i>Shit!</i> The note ignites in my hand as if something was trying to stop me from reading the rest of the note...<br></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    bottom.scrollIntoView({behavior:"smooth"});
                 }, 10000);              
 
                 //paper was destoryed
@@ -349,6 +350,7 @@ $(document).ready(function() {
                     knockingSFX.play();
                     $("<p><i>WHAT THE?!</i> The window starts knocking back at me following parts of the walls continue to knock like there are people all around me!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                     $("<p>Forget this place I get to get through that damn <i><b>door</b></i>!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                    bottom.scrollIntoView({behavior:"smooth"});
                 }, 3000)
             }
 
@@ -392,6 +394,7 @@ $(document).ready(function() {
                         $("<p>Up the <i><u>stairs</u></i>...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
                         $("<p>And then we have the <i><u>front Door</u></i>...</p>").hide().insertBefore("#placeholder").fadeIn(6000);
                         $("<p>We could be a rebel and run out that door... Thing looks like a running head start would break it down. haha</p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                        bottom.scrollIntoView({behavior:"smooth"});
                         
                     });
                     static2SFX.play();
