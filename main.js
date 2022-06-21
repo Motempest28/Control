@@ -14,6 +14,9 @@ function getVolume(){
     var x = document.getElementById("soundVolume").value;
     x = x / 100;
     backgroundNoise.volume(x);
+    darkNoise.volume(x);
+    ghostNoise.volume(x);
+    officeNoise.volume(x);
 }
 
 var backgroundNoise = new Howl({
@@ -28,6 +31,19 @@ var backgroundNoise = new Howl({
     html5: true,
     volume: 0.75,
     loop: true
+  });
+
+  var ghostNoise = new Howl({
+    src: ["sounds/background/ghostHouse.mp3"],
+    html5: true,
+    volume: 0.75,
+    loop: true
+  });
+
+  var violinNoise = new Howl({
+    src: ["sounds/background/violin.mp3"],
+    html5: true,
+    volume: 1
   });
 
   var officeNoise = new Howl({
@@ -121,6 +137,13 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var childSFX = new Howl({
+    src: ["sounds/sfx/child.mp3"],
+    html5: true,
+    volume: 1,
+    loop: true
+  });
+
   var doorMessage1VO = new Howl({
     src: ["sounds/messages/doorMessage1.mp3"],
     html5: true,
@@ -193,7 +216,7 @@ let livingRoomItems = {
 //Track all the rooms where the user has been and have a basic layout of the map of this scene
 
 //first floor
-let beenToBedroom = true;
+let beenToBedroom = false;
 let beenToLivingRoom = false;
 let beenToLivingRoomCloset = false;
 let beenToKitchen = false;
@@ -298,22 +321,29 @@ $(document).ready(function() {
             if(currentLocation=="in_bedroom1"){
                 $("<p>Quickly looking around the bedroom I can see there is...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>A pitch black <u><i><b>window</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                if(bedroomItems.bedframe == false){
+                    $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }
+                
+                if(beenToLivingRoom){
+                    $("<p>A door to the <u><i><b>living room</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }
             }
             else if(currentLocation=="in_livingRoom"){
                 $("<p>Looks like im in the <b><u>Living room</u></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p>There's also the <b><u>bedroom</u></b> I just came out of I can go back in...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
                 walkingOnWoodSFX.play();
 
                 if(livingRoomItems.tv == false){
-                    $("<p>Oh there is a <b><u>TV</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    $("<p>Oh there is a <b><u>TV</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(6000);
                 }
                 if(livingRoomItems.drawer == false){
-                    $("<p>Looks to be a <b><u>drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                    $("<p>Looks to be a <b><u>drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(7000);
                 }
 
-                $("<p>OH SNAPS the <b><u>front door</u></b>! lets inspect it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p>OH SNAPS the <b><u>front door</u></b>! lets inspect it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(8000);
             }
 
         }
@@ -354,8 +384,8 @@ $(document).ready(function() {
                 }, 3000)
             }
 
-            else if(input.includes("bedframe") && currentLocation=="in_bedroom1"){
-                $("<p>Slowly but surely. the bedframe is moved off of the <u><i><b>door</i></b></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+            else if(input.includes("bedframe") && currentLocation=="in_bedroom1" && bedroomItems.bedframe == false){
+                $("<p>Slowly but surely. the bedframe is moved off of the <u><i><b><u>door</u></i></b></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Wondering if the bedframe was protecting me from what is outside this room. I know I'll just die here with no supplies to keep me going. Lets inspect the door and find out where the hell I am</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                 dragingSFX.play();
                 bedroomItems.bedframe = true;
@@ -402,7 +432,7 @@ $(document).ready(function() {
                 livingRoomItems.tv = true;
             }
 
-            else if(input.includes("door") && currentLocation=="in_livingRoom"){
+            else if(input.includes("front door") && currentLocation=="in_livingRoom"){
                 if(frontDoorCount == 0){
                     lockedDoorSFX.play();
                     darkNoise.play();
@@ -508,6 +538,8 @@ $(document).ready(function() {
                 
             }
 
+            
+
             //inspect was not paired with a existing item or object
             else{
                 $("<p>What?... What was I inspecting again? ugh... I should check again to see what was I inspecting...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -516,11 +548,69 @@ $(document).ready(function() {
 
         }
 
+        //player movement with the enter command
         else if(input.includes("enter")){
             if(input.includes("kitchen") && currentLocation == "in_livingRoom"){
                 walkingOnWoodSFX.play();
                 $("<p>If it wasn't so damn creepy this could be a nice kitchen...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 currentLocation ="in_kitchen";
+                $("#command_line").hide()
+
+                setTimeout(function(){
+                    // $("#command_line").hide().fadeIn(5000);
+                    childSFX.play();
+                    ghostNoise.play();
+                    darkNoise.stop();
+                    backgroundNoise.stop();
+
+                    $("<p><b>HOLY!</b> Falling on my ass a little girl appears in front of me with her head twitching, whispering.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>The little girl is standing on the far corner of the room but it doesn't make sense! I can hear her whispering like she is next to me!</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    $("<p id='ghost'><b><i>You need to go...</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                    $("<p id='ghost'><b><i>You don't belong here...</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                    $("<p id='ghost'><b><i>It's not your time yet...</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                    $("<p id='ghost'><b><i>This place is for the dead...</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(11000);
+                    $("<p id='ghost'><b><i>Not for the living</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(13000);
+                    $("<p>Shook... unable to move... none of the things she is saying is getting through to me at all...</p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                    
+                    setTimeout(function(){
+                        childSFX.stop();
+                        ghostNoise.stop();
+                        violinNoise.play();
+                        $("<p id='ghost'><b><i>Go! NOW before he-</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(1000);
+                        $("<p id='me'><b><i>TOO LATE! MUAHHAHAHAHAAAH</i></b>.</p>").hide().insertBefore("#placeholder").fadeIn(2000);
+                        $("<p><i>A being pops behind the little girl and drags her up above!</i></p>").hide().insertBefore("#placeholder").fadeIn(2000);
+                        $("<p><i>It comes back down and drags me into the living room and the entrance to the kichen disappears!</i></p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    },25000);
+                   
+                    setTimeout(function(){
+                        ghostNoise.play();
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        $("#command_line").hide().fadeIn(4000);
+                    },28000);
+                    currentLocation == "in_livingRoom"
+                    bottom.scrollIntoView({behavior:"smooth"});
+                },6000);
+                
+            }
+            else if(input.includes("bedroom") && currentLocation == "in_livingRoom"){
+                walkingOnWoodSFX.play();
+                $("<p>Here again huh?... Here where it all started...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                currentLocation ="in_bedroom1";
+            }
+            else if(input.includes("door") || input.includes("living room") && currentLocation == "in_bedroom1" && bedroomItems.bedframe == true){
+                walkingOnWoodSFX.play();
+                $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>....</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                $("<p>......</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                $("<p><i><b> Why the hell do all creepy ass doors have to sound like that...</b> </i></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                doorOpeningSFX.play();
+                currentLocation = "in_livingRoom"
+                if(beenToLivingRoom == false){
+                    $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                }
+                beenToLivingRoom = true;               
             }
             else if(input.includes("living room") && currentLocation =="in_kitchen"){
                 walkingOnWoodSFX.play();
