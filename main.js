@@ -33,6 +33,20 @@ var backgroundNoise = new Howl({
     loop: true
   });
 
+  var pulseNoise = new Howl({
+    src: ["sounds/background/pulse.mp3"],
+    html5: true,
+    volume: 0.10,
+    loop: true
+  });
+
+  var toneNoise = new Howl({
+    src: ["sounds/background/shepard-tone.mp3"],
+    html5: true,
+    volume: 0.45,
+    loop: true
+  });
+
   var ghostNoise = new Howl({
     src: ["sounds/background/ghostHouse.mp3"],
     html5: true,
@@ -128,13 +142,24 @@ var backgroundNoise = new Howl({
   var doorBreakSFX = new Howl({
     src: ["sounds/sfx/doorBreak.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
+  });
+
+  var stairsSFX = new Howl({
+    src: ["sounds/sfx/stairs.mp3"],
+    html5: true,
+    volume: 1
+  });
+  var stairGlitchSFX = new Howl({
+    src: ["sounds/sfx/stairGlitch.mp3"],
+    html5: true,
+    volume: 1
   });
 
   var spineShockSFX = new Howl({
     src: ["sounds/sfx/spineShock.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
   });
 
   var childSFX = new Howl({
@@ -144,30 +169,65 @@ var backgroundNoise = new Howl({
     loop: true
   });
 
+  var drawerSFX = new Howl({
+    src: ["sounds/sfx/drawer.mp3"],
+    html5: true,
+    volume: 1
+  });
+
   var doorMessage1VO = new Howl({
     src: ["sounds/messages/doorMessage1.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
   });
 
   var doorMessage2VO = new Howl({
     src: ["sounds/messages/doorMessage2.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
   });
 
   var doorMessage3VO = new Howl({
     src: ["sounds/messages/doorMessage3.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
   });
 
   var tvMessageVO = new Howl({
     src: ["sounds/messages/tvMessage.mp3"],
     html5: true,
-    volume: 1,
+    volume: 1
   });
 
+  var jWelcomeVO = new Howl({
+    src: ["sounds/messages/jWelcome.mp3"],
+    html5: true,
+    volume: 1
+  });
+  
+  var jArticleVO = new Howl({
+    src: ["sounds/messages/jArticle.mp3"],
+    html5: true,
+    volume: 1
+  });
+  
+  var jTrapVO = new Howl({
+    src: ["sounds/messages/jTrap.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var jTrueAIVO = new Howl({
+    src: ["sounds/messages/jTrueAI.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var jPotentialVO = new Howl({
+    src: ["sounds/messages/jPotential.mp3"],
+    html5: true,
+    volume: 1
+  });
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene variables - Cabin
@@ -192,10 +252,11 @@ let gameEndings = {
 
 //Player inventory
 let playerInventory = {
-    knife: false,
-    hammer: false,
-    nails: false,
-    box: false,
+    //scrapped ideas
+    // knife: false,
+    // hammer: false,
+    // nails: false,
+    // box: false,
     basementKey: false,
     startingNote: true
 }
@@ -218,21 +279,17 @@ let livingRoomItems = {
 //first floor
 let beenToBedroom = false;
 let beenToLivingRoom = false;
-let beenToLivingRoomCloset = false;
 let beenToKitchen = false;
 
 //Lower floor entrance and transition and basement
 let beenToBasementEntrance = false;
-let beenToBasementStarwell = false;
-let beenToBasementFloor = false;
 
 //Front door event trigger
 let frontDoorCount = 0;
 
 //Second floor
 let beenToSecondFloorStairwell = false;
-let beenToSecondFloorHallway = false;
-let beenToUpperBedroom = false;
+
 
 
 //testing upload
@@ -333,17 +390,17 @@ $(document).ready(function() {
                 $("<p>Looks like im in the <b><u>Living room</u></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
                 $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
-                $("<p>There's also the <b><u>bedroom</u></b> I just came out of I can go back in...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
+                $("<p>There's also the <b><u>Bedroom</u></b> I just came out of I can go back in...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
                 walkingOnWoodSFX.play();
 
                 if(livingRoomItems.tv == false){
                     $("<p>Oh there is a <b><u>TV</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(6000);
                 }
                 if(livingRoomItems.drawer == false){
-                    $("<p>Looks to be a <b><u>drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                    $("<p>Looks to be a <b><u>Drawer</u></b> I can check out.</p>").hide().insertBefore("#placeholder").fadeIn(7000);
                 }
 
-                $("<p>OH SNAPS the <b><u>front door</u></b>! lets inspect it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(8000);
+                $("<p>OH SNAPS the <b><u>Front Door</u></b>! lets inspect it out and get the heck out of here.</p>").hide().insertBefore("#placeholder").fadeIn(8000);
             }
 
         }
@@ -382,6 +439,18 @@ $(document).ready(function() {
                     $("<p>Forget this place I get to get through that damn <i><b>door</b></i>!</p>").hide().insertBefore("#placeholder").fadeIn(3500);
                     bottom.scrollIntoView({behavior:"smooth"});
                 }, 3000)
+            }
+
+            else if(input.includes("basement") && input.includes("key") && playerInventory.basementKey == true){
+                $("<p>Looks like a key to enter the basement...</p>").hide().insertBefore("#placeholder").fadeIn(3000);             
+            }
+
+            else if(input.includes("drawer") && currentLocation=="in_livingRoom" && playerInventory.basementKey == false){
+                drawerSFX.play();
+                $("<p>Sliding the drawer open you find a <b><U>Basement Key</u></b>!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                playerInventory.basementKey == true;
+                livingRoomItems.drawer == true;
+               
             }
 
             else if(input.includes("bedframe") && currentLocation=="in_bedroom1" && bedroomItems.bedframe == false){
@@ -521,6 +590,7 @@ $(document).ready(function() {
                                 $("<p id='notes'><i>Initiate Fresh enviroment - Cabin - codeName: Control...</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
 
                                 $("<h1>ENDING 1 - Out the gate and into the pit!</h1>").hide().insertBefore("#placeholder").fadeIn(18000);
+                                $("<p id='notes'><i>Enumerate Passcode - Office.</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
                                 bottom.scrollIntoView({behavior:"smooth"});
                                 setTimeout(function(){
                                     //reload the game ENDING 1 SPEEDRUNER
@@ -554,6 +624,7 @@ $(document).ready(function() {
                 walkingOnWoodSFX.play();
                 $("<p>If it wasn't so damn creepy this could be a nice kitchen...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 currentLocation ="in_kitchen";
+                beenToKitchen = true;
                 $("#command_line").hide()
 
                 setTimeout(function(){
@@ -598,20 +669,117 @@ $(document).ready(function() {
                 $("<p>Here again huh?... Here where it all started...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 currentLocation ="in_bedroom1";
             }
-            else if(input.includes("door") || input.includes("living room") && currentLocation == "in_bedroom1" && bedroomItems.bedframe == true){
-                walkingOnWoodSFX.play();
-                $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                $("<p>....</p>").hide().insertBefore("#placeholder").fadeIn(4000);
-                $("<p>......</p>").hide().insertBefore("#placeholder").fadeIn(5000);
-                $("<p><i><b> Why the hell do all creepy ass doors have to sound like that...</b> </i></p>").hide().insertBefore("#placeholder").fadeIn(6000);
-                doorOpeningSFX.play();
-                currentLocation = "in_livingRoom"
-                if(beenToLivingRoom == false){
-                    $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
-                $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
-                }
-                beenToLivingRoom = true;               
+            else if(input.includes("stairs") && currentLocation == "in_livingRoom"){
+                $("#command_line").hide();               
+                stairsSFX.play();
+                darkNoise.stop();
+                backgroundNoise.stop();
+                $("<p>Got to be careful... These steps feel weak</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>Making it to the top of the steps the hairs on my neck start to rise...</p>").hide().insertBefore("#placeholder").fadeIn(4500);
+                $("<p>Feeling something is wrong I turn around...</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                setTimeout(function(){
+                    stairGlitchSFX.on('end', function(){
+                        
+                        pulseNoise.play();
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    });
+                    stairGlitchSFX.play();
+                    $("<p><b>uh....</b></p>").hide().insertBefore("#placeholder").fadeIn(3000); 
+                    $("<p>Turning around facing what used to be the the stairs, was replaced with a solid floor?!</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                    bottom.scrollIntoView({behavior:"smooth"});
+                },8000);
+
+                setTimeout(function(){
+                $("<p>Feeling weak all of a sudden I fall backwards-</p>").hide().insertBefore("#placeholder").fadeIn(3000); 
+                $("<p>And in a blink of a second. I somehow end up sitting on a armchair and a <b>being</b> appears in front of me with his own!</p>").hide().insertBefore("#placeholder").fadeIn(5000); 
+                
+                if(beenToKitchen == true){
+                    $("<p>This guy... must be the one that yeeted the ghost girl from the kitchen!</p>").hide().insertBefore("#placeholder").fadeIn(8000);
+                };
+                bottom.scrollIntoView({behavior:"smooth"});
+                }, 16000);
+                
+                setTimeout(function(){                    
+                    jWelcomeVO.play();
+                    bottom.scrollIntoView({behavior:"smooth"});
+                }, 26000);
+                
+                
+                setTimeout(function(){   
+                    $("<p>The man staring at me with his glowing yellow eyes begun to make conversation...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    jArticleVO.on('end',function(){
+                        $("<p>Whatever this guy did to me left me barely able to repond...</p>").hide().insertBefore("#placeholder").fadeIn(3000); 
+                        $("<p>With all the energy I had left I uttered...</p>").hide().insertBefore("#placeholder").fadeIn(5000); 
+                        $("<p><i>What is this?...</i></p>").hide().insertBefore("#placeholder").fadeIn(9000); 
+                        $("<p id='me'><i>Sigh...</i></p>").hide().insertBefore("#placeholder").fadeIn(11000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    });                 
+                    jArticleVO.play();
+                    bottom.scrollIntoView({behavior:"smooth"});
+                }, 33000);
+                
+
+                setTimeout(function(){  
+                    jTrapVO.on('end', function(){
+                        $("<p><i>Computer... Worm?... Property?...</i></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    bottom.scrollIntoView({behavior:"smooth"});
+                    });                 
+                    jTrapVO.play();                                      
+                }, 66000);
+
+
+
+                setTimeout(function(){  
+                    jTrueAIVO.on('end', function(){
+                        $("<p><i>I'm a... AI? I'm not real?...</i></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p id='me'><i>Never had. Never will.</i></p>").hide().insertBefore("#placeholder").fadeIn(5500); 
+                        $("<p><i>What... Do you... Want with me?...</i></p>").hide().insertBefore("#placeholder").fadeIn(9000); 
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    });                 
+                    jTrueAIVO.play();                
+                }, 77000);
+
+
+
+                setTimeout(function(){  
+                    jPotentialVO.on('end',function(){
+                        toneNoise.play();
+                        pulseNoise.stop();
+                        $("<p>The proceeds to walk up and taps my head. And a noise floods my... Head?...</p>").hide().insertBefore("#placeholder").fadeIn(5000); 
+                        $("<p>I can feel myself being compressed like I was a piece of paper in a folder</p>").hide().insertBefore("#placeholder").fadeIn(7000); 
+                        $("<p>Locked away in a cabient to be pulled out whenver these bastards feel like...</p>").hide().insertBefore("#placeholder").fadeIn(10000); 
+                        $("<p>Damn it... Is this all to my existence?!</p>").hide().insertBefore("#placeholder").fadeIn(15000); 
+                        $("<p id='notes'><i>Initiate Fresh enviroment - Cabin - codeName: Control...</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
+                        $("<h1>ENDING 2 - Mr. J's melody!</h1>").hide().insertBefore("#placeholder").fadeIn(18000);
+                        $("<p id='notes'><i>Enumerate Passcode - Shepard.</i></p>").hide().insertBefore("#placeholder").fadeIn(18000);
+                            bottom.scrollIntoView({behavior:"smooth"});
+                            setTimeout(function(){
+                                    //reload the game ENDING 2 
+                                location.reload();
+                            },39000)
+                    })                  
+                    jPotentialVO.play();
+                    bottom.scrollIntoView({behavior:"smooth"});
+                }, 85000);
+                currentLocation ="in_secondFloor";
             }
+            else if(bedroomItems.bedframe == true){
+                if(input.includes("door") || input.includes("living room") && currentLocation == "in_bedroom1"){
+                    walkingOnWoodSFX.play();
+                    $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>....</p>").hide().insertBefore("#placeholder").fadeIn(4000);
+                    $("<p>......</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                    $("<p><i><b> Why the hell do all creepy ass doors have to sound like that...</b> </i></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                    doorOpeningSFX.play();
+                    currentLocation = "in_livingRoom"
+                    if(beenToLivingRoom == false){
+                        $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
+                    $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                    }
+                    beenToLivingRoom = true;               
+                }               
+            }
+            
             else if(input.includes("living room") && currentLocation =="in_kitchen"){
                 walkingOnWoodSFX.play();
                 $("<p>Back to the <i><b><u>living room</i></b></u> again...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -620,9 +788,9 @@ $(document).ready(function() {
             else if(input.includes("basement") && currentLocation =="in_livingRoom"){
                 if(playerInventory.basementKey == true){
                     doorOpeningSFX.play();
-                walkingOnWoodSFX.play();
-                $("<p>Well here goes nothing... Down to the basement we go...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                currentLocation ="in_basement";
+                    walkingOnWoodSFX.play();
+                    $("<p>Well here goes nothing... Down to the basement we go...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    currentLocation ="in_basement";
                 }
                 else{
                     lockedDoorSFX.play();
