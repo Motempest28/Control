@@ -381,6 +381,9 @@ $(document).ready(function() {
                 if(bedroomItems.bedframe == false){
                     $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 }
+                if(bedroomItems.bedframe){
+                    $("<p>Creepy ass <u><b><i>door</b></i></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }
                 
                 if(beenToLivingRoom){
                     $("<p>A door to the <u><i><b>living room</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -391,6 +394,7 @@ $(document).ready(function() {
                 $("<p>Walking around the room there seems to be a <b><u>Kitchen</u></b> I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(4000);
                 $("<p>And... there looks like to be a <b><u>Stairs</u></b> to the second floor I can enter in.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
                 $("<p>There's also the <b><u>Bedroom</u></b> I just came out of I can go back in...</p>").hide().insertBefore("#placeholder").fadeIn(5500);
+                $("<p>And... a <b><u>Basement</u></b> Great...</p>").hide().insertBefore("#placeholder").fadeIn(6500);
                 walkingOnWoodSFX.play();
 
                 if(livingRoomItems.tv == false){
@@ -448,7 +452,8 @@ $(document).ready(function() {
             else if(input.includes("drawer") && currentLocation=="in_livingRoom" && playerInventory.basementKey == false){
                 drawerSFX.play();
                 $("<p>Sliding the drawer open you find a <b><U>Basement Key</u></b>!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                playerInventory.basementKey == true;
+                playerInventory.basementKey = true;
+                console.log(playerInventory.basementKey)
                 livingRoomItems.drawer == true;
                
             }
@@ -664,11 +669,13 @@ $(document).ready(function() {
                 },6000);
                 
             }
+
             else if(input.includes("bedroom") && currentLocation == "in_livingRoom"){
                 walkingOnWoodSFX.play();
                 $("<p>Here again huh?... Here where it all started...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 currentLocation ="in_bedroom1";
             }
+
             else if(input.includes("stairs") && currentLocation == "in_livingRoom"){
                 $("#command_line").hide();               
                 stairsSFX.play();
@@ -763,8 +770,10 @@ $(document).ready(function() {
                 }, 85000);
                 currentLocation ="in_secondFloor";
             }
-            else if(bedroomItems.bedframe == true){
-                if(input.includes("door") || input.includes("living room") && currentLocation == "in_bedroom1"){
+
+            
+            else if(input.includes("door") || input.includes("living room") && currentLocation == "in_bedroom1"){
+                if(bedroomItems.bedframe == true){
                     walkingOnWoodSFX.play();
                     $("<p>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                     $("<p>....</p>").hide().insertBefore("#placeholder").fadeIn(4000);
@@ -780,11 +789,6 @@ $(document).ready(function() {
                 }               
             }
             
-            else if(input.includes("living room") && currentLocation =="in_kitchen"){
-                walkingOnWoodSFX.play();
-                $("<p>Back to the <i><b><u>living room</i></b></u> again...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                currentLocation ="in_livingRoom";
-            }
             else if(input.includes("basement") && currentLocation =="in_livingRoom"){
                 if(playerInventory.basementKey == true){
                     doorOpeningSFX.play();
@@ -792,7 +796,7 @@ $(document).ready(function() {
                     $("<p>Well here goes nothing... Down to the basement we go...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                     currentLocation ="in_basement";
                 }
-                else{
+                else if(playerInventory.basementKey == false){
                     lockedDoorSFX.play();
                     $("<p>Damn it... the door to the basement is locked. Must be a key somewhere here...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 }
