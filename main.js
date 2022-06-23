@@ -813,9 +813,10 @@ $(document).ready(function() {
 
             else if(input.includes("tv") && currentLocation=="in_livingRoom" && livingRoomItems.tv == false){
                 $("<p>The <i><b>TV</i></b> tuns on with a loud static and then a voice comes through...</p>").hide().insertBefore("#placeholder").fadeIn(3500);
+                $("#command_line").hide();
                 staticSFX.on('end',function(){
                     tvMessageVO.play();
-                    $("#command_line").hide();
+                    
                 });
                 staticSFX.play();
                 
@@ -962,7 +963,7 @@ $(document).ready(function() {
             if(input.includes("kitchen") && currentLocation == "in_livingRoom"){
                 walkingOnWoodSFX.play();
                 $("<p>If it wasn't so damn creepy this could be a nice kitchen...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
-                currentLocation ="in_kitchen";
+                
                 beenToKitchen = true;
                 $("#command_line").hide()
 
