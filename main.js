@@ -17,6 +17,8 @@ function getVolume(){
     darkNoise.volume(x);
     ghostNoise.volume(x);
     officeNoise.volume(x);
+    heartRateNoise.volume(x);
+    toneNoise.volume(x);
 }
 
 var backgroundNoise = new Howl({
@@ -24,6 +26,19 @@ var backgroundNoise = new Howl({
     html5: true,
     volume: 0.40,
     loop: true
+  });
+
+  var operateNoise = new Howl({
+    src: ["sounds/background/operate.mp3"],
+    html5: true,
+    volume: 0.60,
+    loop: true
+  });
+
+  var heartRateNoise = new Howl({
+    src: ["sounds/background/heartRate.mp3"],
+    html5: true,
+    volume: 0.40
   });
 
   var darkNoise = new Howl({
@@ -51,7 +66,7 @@ var backgroundNoise = new Howl({
     src: ["sounds/background/ghostHouse.mp3"],
     html5: true,
     volume: 0.75,
-    loop: true
+    loop: false
   });
 
   var violinNoise = new Howl({
@@ -75,6 +90,12 @@ var backgroundNoise = new Howl({
 
   var paperSFX = new Howl({
     src: ["sounds/sfx/paper.mp3"],
+    html5: true,
+    volume: 0.75,
+  });
+
+  var dialUpSFX = new Howl({
+    src: ["sounds/sfx/dialUp.mp3"],
     html5: true,
     volume: 0.75,
   });
@@ -121,6 +142,12 @@ var backgroundNoise = new Howl({
     volume: 1,
   });
 
+  var groanSFX = new Howl({
+    src: ["sounds/sfx/groan.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
   var lockedDoorSFX = new Howl({
     src: ["sounds/sfx/lockedDoor.mp3"],
     html5: true,
@@ -135,6 +162,12 @@ var backgroundNoise = new Howl({
 
   var doorKickFallSFX = new Howl({
     src: ["sounds/sfx/doorKickFall.mp3"],
+    html5: true,
+    volume: 1,
+  });
+
+  var theCrashSFX = new Howl({
+    src: ["sounds/sfx/theCrash.mp3"],
     html5: true,
     volume: 1,
   });
@@ -171,6 +204,30 @@ var backgroundNoise = new Howl({
 
   var drawerSFX = new Howl({
     src: ["sounds/sfx/drawer.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var woodBreakSFX = new Howl({
+    src: ["sounds/sfx/woodBreak.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var groundFallSFX = new Howl({
+    src: ["sounds/sfx/groundFall.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var ringingSFX = new Howl({
+    src: ["sounds/sfx/ringing.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var chestOpenSFX = new Howl({
+    src: ["sounds/sfx/chestOpen.mp3"],
     html5: true,
     volume: 1
   });
@@ -229,6 +286,42 @@ var backgroundNoise = new Howl({
     volume: 1
   });
 
+  var wakeUpFVO = new Howl({
+    src: ["sounds/basement/wakeUpF.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var wakeUpF2VO = new Howl({
+    src: ["sounds/basement/wakeUpF2.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var thankGoodnessVO = new Howl({
+    src: ["sounds/basement/thankGoodness.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var theDocVO = new Howl({
+    src: ["sounds/basement/theDoc.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var dontVO = new Howl({
+    src: ["sounds/basement/dont.mp3"],
+    html5: true,
+    volume: 1
+  });
+
+  var gladVO = new Howl({
+    src: ["sounds/basement/glad.mp3"],
+    html5: true,
+    volume: 1
+  });
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Scene variables - Cabin
 
@@ -241,14 +334,6 @@ let gameStart = true;
 let currentLocation = "in_bedroom1";
 let currentLocationDisplay;
 
-//Ending Triggers
-let gameEndings = {
-    ending1: false,
-    ending2: false,
-    ending3: false,
-    ending4: false
-}
-
 
 //Player inventory
 let playerInventory = {
@@ -258,18 +343,32 @@ let playerInventory = {
     // nails: false,
     // box: false,
     basementKey: false,
-    startingNote: true
+    startingNote: true,
+    picture: false
 }
 
 //Bedroom items/Events
 let bedroomItems = {
     bedframe: false,
+    terminal: false
+}
+
+//terminal passcode for secret ending
+let terminal = {
+    ending1: false,
+    ending2: false,
+    ending3: false
 }
 
 //Living room items/Events
 let livingRoomItems = {
     tv: false,
     drawer: false
+}
+
+//basement items/Events
+let basementItems = {
+    chest: false
 }
 
 
@@ -363,6 +462,14 @@ $(document).ready(function() {
                 pNote = "";
             }
 
+            //note
+            if(playerInventory.picture){
+                pNote = "-Picture <br>";
+            }
+            else{
+                pNote = "";
+            }
+
             //if the user has nothing
             if(playerInventory.knife == false && playerInventory.basementKey == false && playerInventory.note == false){
                 $("<p>There is nothing I'm holding...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -382,12 +489,46 @@ $(document).ready(function() {
                     $("<p>Old rustly <u><b><i>bedframe</b></i></u>... and behind it looks like a <i><b>door</i></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 }
                 if(bedroomItems.bedframe){
-                    $("<p>Creepy ass <u><b><i>door</b></i></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    if(beenToLivingRoom){
+                        $("<p>A door to the <u><i><b>living room</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p>There a <u><i><b>terminal</b></i></u>??? It wasn't here when I left?</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        bedroomItems.terminal = true;
+    
+                    }
+                    else{
+                        $("<p>Creepy ass <u><b><i>door</b></i></u>...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    }
+                    
                 }
                 
-                if(beenToLivingRoom){
-                    $("<p>A door to the <u><i><b>living room</b></i></u>.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                
+            }
+
+            if(currentLocation=="in_basement"){
+                if(basementItems.chest == false){
+                $("#command_line").hide();
+                pulseNoise.stop();
+                backgroundNoise.stop();
+                darkNoise.stop();
+                heartRateNoise.play();
+                $("<p>Looking around it's nothing but cobblestone.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<p>except...</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                $("<p>For a small <b><u>chest</u></b> in the middle of the room...</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                $("<p>Whats that sound?...</p>").hide().insertBefore("#placeholder").fadeIn(12000);
+                bottom.scrollIntoView({behavior:"smooth"});
+                
+                setTimeout(function(){
+                    wakeUpFVO.on('end',function(){
+                        $("#command_line").hide().fadeIn(3000);
+                    })
+                    wakeUpFVO.play();
+                }, 9000);
                 }
+                else{
+                    $("<p>There is nothing left here in this basement... just me...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                }
+                
+                
             }
             else if(currentLocation=="in_livingRoom"){
                 $("<p>Looks like im in the <b><u>Living room</u></b></p>").hide().insertBefore("#placeholder").fadeIn(3000);
@@ -448,6 +589,92 @@ $(document).ready(function() {
             else if(input.includes("basement") && input.includes("key") && playerInventory.basementKey == true){
                 $("<p>Looks like a key to enter the basement...</p>").hide().insertBefore("#placeholder").fadeIn(3000);             
             }
+            else if(input.includes("terminal") && bedroomItems.terminal == true){
+                if (input.includes("office")) {
+                    $("#command_line").hide();                   
+                    dialUpSFX.on('end', function(){
+                        if(terminal.ending1 == false){
+                            $("<p id='notes'>Passcode 1 entered</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        }                       
+                        $("#command_line").hide().fadeIn(3000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        terminal.ending1 = true
+                    })
+                    dialUpSFX.play();
+                    
+                }   
+                else if (input.includes("shepard")) {
+                    $("#command_line").hide();
+                    dialUpSFX.on('end', function(){
+                        if(terminal.ending2 == false){
+                            $("<p id='notes'>Passcode 2 entered</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        }                       
+                        $("#command_line").hide().fadeIn(3000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        terminal.ending2 = true
+                    })
+                    dialUpSFX.play();  
+                } 
+                else if (input.includes("coma")) {
+                    $("#command_line").hide();
+                    dialUpSFX.on('end', function(){
+                        if(terminal.ending3 == false){
+                            $("<p id='notes'>Passcode 3 entered</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        }                       
+                        $("#command_line").hide().fadeIn(3000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        terminal.ending3 = true
+                    })
+                    dialUpSFX.play();  
+                }  
+                else if (input.includes("command") && input.includes("wake") && terminal.ending1 == true && terminal.ending2 == true && terminal.ending3 == true) {
+                    $("#command_line").hide();
+                    pulseNoise.stop();
+                    backgroundNoise.stop();
+                    darkNoise.stop();
+                    officeNoise.stop();
+
+                    operateNoise.play();
+                    $("<p id='alanWake'>Hey~~~ Thanks for playing! It's me the creator of control!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p id='alanWake'>This game was a showcase for the skills I learned during my time taking CSI 242!</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                    $("<p id='alanWake'>It was really fun to be able to do some story writing while making my first big project!</p>").hide().insertBefore("#placeholder").fadeIn(8000);
+                    $("<p id='alanWake'>I did'nt realize how hard it is to do the whole thing by yourself...</p>").hide().insertBefore("#placeholder").fadeIn(11000);
+                    setTimeout(() => {
+                        $("<p id='alanWake'>But it was fun! And got some of my friends to help out with this project as well!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p id='alanWake'>Special thanks to Jonathan Reed for doing the second ending voice lines!! Granted you were so damn quiet I had to up the gain and didn't realize the background noise was bleeding through... oh well HAHAHHAAH</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                        $("<p id='alanWake'>Special thanks to Jackie for doing the third ending voice lines!!</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                        $("<p id='alanWake'>As for the music I used Special thanks to FreshmanSound on youtube!! This guy makes awesome soundtracks! If I were to make another project and monetise it. I would for sure go with him and his license feed is not too bad for amazing work!</p>").hide().insertBefore("#placeholder").fadeIn(12000);
+                        $("<p id='alanWake'>And for the current song it is 'Lets operate' from angel beats. Rest in piece- 'Ai Kamachi' '数多' </p>").hide().insertBefore("#placeholder").fadeIn(12000);
+                        $("<p id='alanWake'>Special thanks to David for helping troubleshoot howler and getting that to work!</p>").hide().insertBefore("#placeholder").fadeIn(16000);
+                        $("<p id='alanWake'>Special thanks to Matt for teaching us Javascript and how mad goofy it can be. XD</p>").hide().insertBefore("#placeholder").fadeIn(16000);
+                        $("<p id='alanWake'>I took inspiration from 'alan wake', 'control', and from a text adventure game on steam called 'buried'</p>").hide().insertBefore("#placeholder").fadeIn(20000);
+                        $("<p id='alanWake'>would I make another game who knows. But in the meantime Thank you again for playing and getting all 3 endings!!</p>").hide().insertBefore("#placeholder").fadeIn(20000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        setTimeout(() => {
+                            $("<p id='notes'><i>Initiate Fresh enviroment - Cabin - codeName: Control...</i></p>").hide().insertBefore("#placeholder").fadeIn(1000);                               
+                            $("<h1>ENDING 4 - Thanks</h1>").hide().insertBefore("#placeholder").fadeIn(1000);                           
+                            $("<p id='alanWake'>This game will now reload in-</p>").hide().insertBefore("#placeholder").fadeIn(13000);
+                            $("<p id='alanWake'>3</p>").hide().insertBefore("#placeholder").fadeIn(14000);
+                            $("<p id='alanWake'>2</p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                            $("<p id='alanWake'>1</p>").hide().insertBefore("#placeholder").fadeIn(16000);
+                            bottom.scrollIntoView({behavior:"smooth"});
+                            setTimeout(function(){  
+                                //ENDING 4                                                                 
+                                location.reload();
+                                },18000)
+                        }, 28000);
+
+                    }, 15000);
+                } 
+                else{
+                    $("<p id='notes'>To use this terminal you must complete the 3 endings and record the passcode.</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p id='notes'>To enter passcode:</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                    $("<p id='notes'>Type: inspect terminal 'passcode'...</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                    $("<p id='notes'>Once all 3 codes are entered...</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                    $("<p id='notes'>Type 'inspect terminal command wake'</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                    $("<p id='notes'>Happy hunting Test Subject: 1855</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                }     
+            }
 
             else if(input.includes("drawer") && currentLocation=="in_livingRoom" && playerInventory.basementKey == false){
                 drawerSFX.play();
@@ -475,6 +702,113 @@ $(document).ready(function() {
                 beenToLivingRoom = true;
                 $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
                 $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
+            }
+
+            else if(input.includes("chest") && currentLocation=="in_basement"){
+                basementItems.chest = true;
+                $("#command_line").hide();
+                chestOpenSFX.on('end', function(){
+                    $("<p>Opening the chest you find...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>a <b><u>Picture</u></b></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                    $("<p>Is someone there?...</p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                    wakeUpF2VO.play();
+                    bottom.scrollIntoView({behavior:"smooth"});
+                    $("#command_line").hide().fadeIn(15000);
+                })
+                chestOpenSFX.play();
+                playerInventory.picture = true;
+            }
+
+            else if(input.includes("picture") && currentLocation=="in_basement" && playerInventory.picture == true){
+                $("#command_line").hide();
+                paperSFX.play();
+                $("<p>You pick up the picture and stare at it...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                $("<img src='images/story/theAccident.jpg' id='crash' >").hide().insertBefore("#placeholder").fadeIn(6000);
+                window.scrollTo(0,document.body.scrollHeight);
+                $("<p>You're body starts to throb in pain as the memory comes back!</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                window.scrollTo(0,document.body.scrollHeight);
+                bottom.scrollIntoView({behavior:"smooth"});
+
+                setTimeout(function(){
+                    bottom.scrollIntoView({behavior:"smooth"});
+                    theCrashSFX.on('end', function(){
+                        bottom.scrollIntoView({behavior:"smooth"});
+                        $("<p>It all comes back to you!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                        $("<p>You were caught in a accident!</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                        $("<p>Then... This sound?... that voice?...</p>").hide().insertBefore("#placeholder").fadeIn(12000);
+                        $("<p>The ground then disapears and you find yourself in a free fall into the darkness...</p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+
+
+                        setTimeout(function(){
+                            groanSFX.on('end', function(){
+                                $("<p>You groan as a blinding light shines in your face!</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                                $("<p>You find yourself in a hospital room with a woman sitting next to you.</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                                $("<p>With a sigh of relief from the woman she beings to speak.</p>").hide().insertBefore("#placeholder").fadeIn(10000);
+                                bottom.scrollIntoView({behavior:"smooth"});
+                                setTimeout(() => {
+                                    bottom.scrollIntoView({behavior:"smooth"});
+                                    thankGoodnessVO.on('end', function(){
+                                        $("<p><i>I was brain dead?... you groaned</i></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                                        bottom.scrollIntoView({behavior:"smooth"});
+                                        setTimeout(() => {
+                                            theDocVO.on('end', function () {
+                                                $("<p>I... had the weirdest dream... I was in this old-</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                                                bottom.scrollIntoView({behavior:"smooth"});
+                                                setTimeout(() => {
+                                                    bottom.scrollIntoView({behavior:"smooth"});
+                                                    dontVO.on('end', function(){
+                                                        $("<p>ok...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                                                        $("<p>A doctor comes into the room and looks at the both of us.</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                                                        $("<p id='me'>Hey there patient 1855! looking good there aren't ya my boi~</p>").hide().insertBefore("#placeholder").fadeIn(5000);
+                                                        $("<p id='me'>The experiment ended up working as expected you be able to leave once we can get some blood samples from ya~</p>").hide().insertBefore("#placeholder").fadeIn(9000);
+                                                        $("<p id='me'>For now you rest up ya hear?~ I'll leave you two luv birds alone now~ You two got some catching up to do!~</p>").hide().insertBefore("#placeholder").fadeIn(14000);
+                                                        $("<p>Turning back to the woman she holds my hand and says-</p>").hide().insertBefore("#placeholder").fadeIn(16000);
+                                                        bottom.scrollIntoView({behavior:"smooth"});
+
+                                                        setTimeout(() => {
+                                                            gladVO.on('end', function(){
+                                                                $("<p><i>sounds... like a plan... smiling I begin to drift back to sleep...</i></p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                                                                $("<p id='notes'><i>Initiate Fresh enviroment - Cabin - codeName: Control...</i></p>").hide().insertBefore("#placeholder").fadeIn(9000);                               
+                                                                $("<h1>ENDING 3 - Wakey Wakey</h1>").hide().insertBefore("#placeholder").fadeIn(12000);
+                                                                $("<p id='notes'><i>Enumerate Passcode - Coma.</i></p>").hide().insertBefore("#placeholder").fadeIn(13000);
+                                                                bottom.scrollIntoView({behavior:"smooth"});
+                                                                setTimeout(function(){  
+                                                                    //ENDING 3                                                                 
+                                                                    location.reload();
+                                                                },26000)
+                                                            });
+                                                            gladVO.play();
+                                                        }, 18000);
+                                                    })
+                                                    dontVO.play();
+                                                }, 3500);
+                                            })
+                                            theDocVO.play();
+                                        }, 4000);
+                                    });
+                                    thankGoodnessVO.play();
+                                }, 11000);
+
+                            })
+                            groanSFX.play();
+                        },14000)
+                        
+                    })
+                    theCrashSFX.play();
+                },9000)
+
+
+                chestOpenSFX.on('end', function(){
+                    $("<p>Opening the chest you find...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+                    $("<p>a <b><u>Picture</u></b></p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                    $("<p>Is someone there?...</p>").hide().insertBefore("#placeholder").fadeIn(15000);
+                    wakeUpF2VO.play();
+                    
+                })
+                
+                bottom.scrollIntoView({behavior:"smooth"});
+                
             }
 
             else if(input.includes("tv") && currentLocation=="in_livingRoom" && livingRoomItems.tv == false){
@@ -783,7 +1117,7 @@ $(document).ready(function() {
                     currentLocation = "in_livingRoom"
                     if(beenToLivingRoom == false){
                         $("<p>Looks like I'm in a living room.</p>").hide().insertBefore("#placeholder").fadeIn(6500);
-                    $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                        $("<p>Interesting... </p>").hide().insertBefore("#placeholder").fadeIn(7000);
                     }
                     beenToLivingRoom = true;               
                 }               
@@ -791,15 +1125,42 @@ $(document).ready(function() {
             
             else if(input.includes("basement") && currentLocation =="in_livingRoom"){
                 if(playerInventory.basementKey == true){
+                    $("#command_line").hide(); 
                     doorOpeningSFX.play();
                     walkingOnWoodSFX.play();
                     $("<p>Well here goes nothing... Down to the basement we go...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
+
+                    setTimeout(function(){
+                        woodBreakSFX.on('end', function(){
+                            groundFallSFX.on('end', function(){
+                                $("<p>Hitting the ground hard, you're ears start to ring!</p>").hide().insertBefore("#placeholder").fadeIn(1000);
+                                ringingSFX.on('end',function(){
+                                    $("<p>Giving it some time the ringing subsides and you get back up on your feet.</p>").hide().insertBefore("#placeholder").fadeIn(6000);
+                                    $("<p>You are now stuck in basement!</p>").hide().insertBefore("#placeholder").fadeIn(7000);
+                                    $("#command_line").hide().fadeIn(9000); 
+                                    bottom.scrollIntoView({behavior:"smooth"});
+                                })
+                                ringingSFX.play();
+                                
+                                bottom.scrollIntoView({behavior:"smooth"});
+                            });
+                            groundFallSFX.play();
+                        })
+                        woodBreakSFX.play();                       
+                        $("<p>While walking down the stairs... About halfway the stairs give and you fall straight down to ground level!</p>").hide().insertBefore("#placeholder").fadeIn(1000);
+                        bottom.scrollIntoView({behavior:"smooth"});
+                    },11000);
                     currentLocation ="in_basement";
                 }
                 else if(playerInventory.basementKey == false){
                     lockedDoorSFX.play();
                     $("<p>Damn it... the door to the basement is locked. Must be a key somewhere here...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 }
+                
+            }
+
+            else if(input.includes("living room") && currentLocation =="in_basement"){
+                $("<p>Stairs to the living room collasped. Unless im spiderman, I'm not getting out of here...</p>").hide().insertBefore("#placeholder").fadeIn(3000);
                 
             }
             else{
